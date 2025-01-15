@@ -121,11 +121,12 @@ public class EduStudentController extends BaseController {
     public AjaxResult addSave(EduStudent eduStudent) {
         System.out.println(eduStudent);
         SysUser user = eduStudent.getSysUser();
-        if (sysUserService.checkLoginNameUnique(user)) {
+        if (!sysUserService.checkLoginNameUnique(user)) {
+            System.out.println("进来了");
             return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
-        } else if (sysUserService.checkPhoneUnique(user)) {
+        } else if (!sysUserService.checkPhoneUnique(user)) {
             return error("新增用户'" + user.getLoginName() + "'失败，手机号码已存在");
-        } else if (sysUserService.checkEmailUnique(user)) {
+        } else if (!sysUserService.checkEmailUnique(user)) {
             return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
         //设置学号和登录账号

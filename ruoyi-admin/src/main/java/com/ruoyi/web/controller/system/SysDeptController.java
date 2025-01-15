@@ -180,6 +180,7 @@ public class SysDeptController extends BaseController
     public List<Ztree> treeDataExcludeChild(@PathVariable(value = "excludeId", required = false) Long excludeId)
     {
         SysDept dept = new SysDept();
+        excludeId = 100l;
         dept.setExcludeId(excludeId);
         List<Ztree> ztrees = deptService.selectDeptTreeExcludeChild(dept);
         return ztrees;

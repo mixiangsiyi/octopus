@@ -177,12 +177,18 @@ public class SysDeptController extends BaseController
      */
     @GetMapping("/treeData/{excludeId}")
     @ResponseBody
-    public List<Ztree> treeDataExcludeChild(@PathVariable(value = "excludeId", required = false) Long excludeId)
-    {
+    public List<Ztree> treeDataExcludeChild(@PathVariable(value = "excludeId", required = false) Long excludeId) {
+        if (excludeId == null) {
+            excludeId = 100L;  // 设置默认值为 100L
+        }
+
         SysDept dept = new SysDept();
-        excludeId = 100l;
+        // 如果 excludeId 为空，则设置为 null 或者一个默认值
         dept.setExcludeId(excludeId);
+
+        // 调用服务层方法获取部门树数据
         List<Ztree> ztrees = deptService.selectDeptTreeExcludeChild(dept);
         return ztrees;
     }
+
 }

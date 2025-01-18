@@ -278,7 +278,9 @@
 
     /*用户管理-修改-选择部门树*/
     function selectDeptTree() {
-        var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        var treeId = $("#treeId").val();
+        // 如果 treeId 为 null 或为空字符串，使用默认的 deptId "100"
+        var deptId = (treeId && treeId !== "null" && treeId !== "") ? treeId : "100";
         var url = ctx + "system/dept/selectDeptTree/" + deptId;
         var options = {
             title: '选择部门',

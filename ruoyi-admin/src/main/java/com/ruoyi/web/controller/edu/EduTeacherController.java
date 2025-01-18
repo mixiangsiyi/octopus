@@ -116,11 +116,11 @@ public class EduTeacherController extends BaseController {
     @Transactional(rollbackFor = Exception.class)
     public AjaxResult addSave(@Validated EduTeacher eduTeacher) {
         SysUser user = eduTeacher.getSysUser();
-        if (sysUserService.checkLoginNameUnique(user)) {
+        if (!sysUserService.checkLoginNameUnique(user)) {
             return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
-        } else if (sysUserService.checkPhoneUnique(user)) {
+        } else if (!sysUserService.checkPhoneUnique(user)) {
             return error("新增用户'" + user.getLoginName() + "'失败，手机号码已存在");
-        } else if (sysUserService.checkEmailUnique(user)) {
+        } else if (!sysUserService.checkEmailUnique(user)) {
             return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
         user.setSalt(ShiroUtils.randomSalt());
@@ -160,9 +160,9 @@ public class EduTeacherController extends BaseController {
         SysUser user = eduTeacher.getSysUser();
         //校验用户是否允许操作
         sysUserService.checkUserAllowed(user);
-        if (sysUserService.checkPhoneUnique(user)) {
+        if (!sysUserService.checkPhoneUnique(user)) {
             return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
-        } else if (sysUserService.checkEmailUnique(user)) {
+        } else if (!sysUserService.checkEmailUnique(user)) {
             return error("修改用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
         }
         user.setUpdateTime(new Date());

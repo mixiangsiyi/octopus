@@ -288,7 +288,8 @@
     /*用户管理-新增-选择部门树*/
     function selectDeptTree() {
         var treeId = $("#treeId").val();
-        var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+        // 如果 treeId 为空或为 null，使用默认的 deptId "100"
+        var deptId = (treeId && treeId !== "null" && treeId !== "") ? treeId : "100";
         var url = ctx + "system/dept/selectDeptTree/" + deptId;
         var options = {
             title: '选择部门',
@@ -299,15 +300,38 @@
         $.modal.openOptions(options);
     }
 
+
     function doSubmit(index, layero) {
+        // 获取弹出窗口中的 iframe 中的 zTree 实例
         var tree = layero.find("iframe")[0].contentWindow.$._tree;
-        if ($.tree.notAllowParents(tree)) {
-            var body = layer.getChildFrame('body', index);
-            $("#treeId").val(body.find('#treeId').val());
-            $("#treeName").val(body.find('#treeName').val());
-            layer.close(index);
+
+        // 假设 zTree 使用的是 onClick 或 onCheck 事件来选中节点
+        var selectedNode = tree.getSelectedNodes()[0];  // 获取选中的第一个节点
+
+        // 判断选中节点是否存在
+        if (selectedNode) {
+            var treeId = selectedNode.id;  // 获取树的节点 id
+            var treeName = selectedNode.name;  // 获取树的节点 name
+
+            // 打印调试信息
+            console.log("Selected treeId:", treeId);  // 确保获取正确的值
+            console.log("Selected treeName:", treeName);  // 确保获取正确的值
+
+            // 确保父页面的 input 元素可用，填入选中的 treeId 和 treeName
+            $("#treeId").val(treeId);
+            $("#treeName").val(treeName);
+
+            // 使用 parent.layer.close() 关闭父窗口的弹窗
+            parent.layer.close(index);
+        } else {
+            console.error("No node selected.");
         }
     }
+
+
+
+
+
 
     $(function () {
         $('#post').select2({
